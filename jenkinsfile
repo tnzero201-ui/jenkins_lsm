@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                echo '코드 체크아웃 중...'
+                checkout scm
+            }
+        }
+        stage('Install') {
+            steps {
+                echo '의존성 설치 중...'
+                bat 'pip install -r requirements.txt'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo '테스트 실행 중...'
+                bat 'pytest'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo '빌드 완료!'
+            }
+        }
+    }
+    post {
+        success {
+            echo '✅ 파이프라인 성공!'
+        }
+        failure {
+            echo '❌ 파이프라인 실패!'
+        }
+    }
+}
